@@ -17,8 +17,8 @@ namespace GrpcService.Services
             
             if(request.UserId == 1)
             {
-                output.FirstName = "Jamie";
-                output.LastName = "Smith";
+                output.FirstName = "Kanan";
+                output.LastName = "Garazada";
             }
             else
             {
@@ -27,6 +27,34 @@ namespace GrpcService.Services
             }
 
             return Task.FromResult(output);
+        }
+
+        public override async Task GetNewCustomers(NewCustomerRequest request, IServerStreamWriter<CustomerModel> responseStream, ServerCallContext context)
+        {
+            List<CustomerModel> customers = new List<CustomerModel>
+            {
+                new CustomerModel
+                {
+                    FirstName = "Kanan",
+                    LastName = "Garazada",
+                    EmailAddress = "kanangarayev02@gmail.com",
+                    Age= 20,
+                    IsAlive = true
+                },
+                new CustomerModel
+                {
+                    FirstName = "Bilbo",
+                    LastName = "Baggins",
+                    EmailAddress = "bilbo@gmail.com",
+                    Age= 120,
+                    IsAlive = false
+                }
+            };
+
+            foreach (var customer in customers)
+            {
+                await responseStream.WriteAsync(customer);
+            }
         }
     }
 }
